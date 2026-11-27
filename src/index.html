@@ -28,6 +28,7 @@
 
   --pl-gregoriano: #1f5c3d;
   --pl-gracas: #a4531b;
+  --pl-presencial: #33508a;
   --pl: var(--text);
 
   --ease: cubic-bezier(.2, .8, .2, 1);
@@ -52,6 +53,7 @@
     --logo-filter: invert(1);
     --pl-gregoriano: #6cc196;
     --pl-gracas: #f0a868;
+    --pl-presencial: #94b2ec;
   }
 }
 
@@ -167,9 +169,20 @@ body.on-detail .bar .back { opacity: 1; pointer-events: auto; transform: none; }
           mask: radial-gradient(circle, #000 30%, transparent 70%);
 }
 
+.cover.presencial { background: radial-gradient(130% 110% at 20% 100%, #c98a8a 0%, #6d5a86 32%, #2b3762 62%, #141b36 100%); }
+.cover.presencial .arcs {
+  position: absolute; left: 50%; top: 44%; width: 150cqi; height: 150cqi; transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: repeating-radial-gradient(circle, transparent 0 9cqi, rgba(255,255,255,.16) 9cqi calc(9cqi + 1px));
+  -webkit-mask: linear-gradient(to bottom, #000 0 50%, transparent 50%);
+          mask: linear-gradient(to bottom, #000 0 50%, transparent 50%);
+}
+.cover.presencial .ttl { font-size: 12.5cqi; }
+
 /* ---------- Detail ---------- */
 [data-pl="gregoriano"] { --pl: var(--pl-gregoriano); }
 [data-pl="gracas"] { --pl: var(--pl-gracas); }
+[data-pl="presencial"] { --pl: var(--pl-presencial); }
 
 .hero {
   display: grid; grid-template-columns: minmax(200px, 300px) 1fr; gap: clamp(24px, 4vw, 48px);
@@ -448,6 +461,26 @@ const GRACAS = [
   ["Aleluia", "wkQzYqVhiMg"],
 ];
 
+const PRESENCIAL_OUT26 = [
+  ["Enya – May It Be", "acM4c1BYVlU"],
+  ["Schubert – Ave Maria", "xExJRwDM1H4"],
+  ["Dorival Caymmi – Acalanto", "duDYz9L5JTA"],
+  ["FHOP Music – Tu És + Águas Purificadoras", "YXnQ02HYB1w"],
+  ["Elis Regina – Fascinação", "Kfs6s3l94cE"],
+  ["PRISCILLA e Whindersson Nunes – Girassol", "PePXuS8jAtg"],
+  ["Canção tradicional francesa – À la claire fontaine", "-VctOj6Bm4Y"],
+  ["Down by the Salley Gardens", "xW6noT3K968"],
+  ["Elaine Paige – Memory (Memória)", "mdBVJbzkoqo"],
+  ["Dani Black – Muda Tudo", "l951pP4qP5U"],
+  ["Ekaterina Shelehova – Savage Daughter", "tegev08KyHY"],
+  ["Händel · Philippe Jaroussky – Lascia ch’io pianga", "KxnBjAaJWCc"],
+  ["Zezé Di Camargo & Luciano – É o Amor", "Be6ROem9ms8"],
+  ["Dani Black e Mariana Nolasco – Ser Amado", "6PQDEUyEViw"],
+  ["Simon & Garfunkel – Scarborough Fair", "4Ccgk8PXz64"],
+  ["Joanna – A Padroeira", "ywT3YgxZaEE"],
+  ["Cantiga popular brasileira – Se Essa Rua Fosse Minha", "KLNiIJRerUg"],
+];
+
 const track = ([full, id, cat = ""]) => {
   const [artist, title] = full.includes(" – ") ? full.split(" – ") : ["", full];
   return { title, artist, id, cat };
@@ -467,6 +500,13 @@ const PLAYLISTS = [
     cover: ["Ação de", "Graças"],
     desc: "Canções para agradecer pelo que foi vivido e pelo que ainda virá.",
     tracks: GRACAS.map(track),
+  },
+  {
+    slug: "presencial-outubro-2026", theme: "presencial",
+    title: "Presencial – Outubro de 2026",
+    cover: ["Presencial", "Outubro de 2026"],
+    desc: "As músicas do nosso encontro presencial de outubro.",
+    tracks: PRESENCIAL_OUT26.map(track),
   },
 ];
 
@@ -489,6 +529,8 @@ function coverHTML(pl) {
     ? `<div class="staff"></div>` +
       [[14, 32], [24, 38], [34, 26], [44, 32], [54, 44], [64, 38], [74, 32]]
         .map(([x, y]) => `<span class="neume" style="left:${x}%;top:${y}%"></span>`).join("")
+    : pl.theme === "presencial"
+    ? `<div class="arcs"></div>`
     : `<div class="sun"></div>`;
   return `<div class="cover ${pl.theme}" aria-hidden="true">${deco}
     <div class="lbl">Better Together</div>
